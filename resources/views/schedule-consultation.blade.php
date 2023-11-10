@@ -2,59 +2,71 @@
 
 @section('title', 'Mashael Alsulaiti Law Firm | Schedule Consultation')
 @section('content')
-    <section class="px-xxl-5 py-5">
-        <div class="container-fluid px-xxl-5 px-lg-5">
-            <h1 class="display-3 text-dark text-center">{!! trans('contactus.mainHead') !!}</h1>
-            <h3 class="h4 text-center">{!! trans('contactus.subHead') !!}</h3>
-            {{-- <div class="">
-                <!-- Calendly inline widget begin -->
-                <div class="calendly-inline-widget" data-url="https://calendly.com/maslawfirm/20min?primary_color=800000"
-                    style="min-width:320px;height:700px;"></div>
-                <script type="text/javascript" src="https://assets.calendly.com/assets/external/widget.js" async></script>
-                <!-- Calendly inline widget end -->
-            </div> --}}
-            <div class="mt-md-0 mt-3">
-                @if (app()->isLocale('en'))
-                    <div>
-                        <script src="https://embed.ycb.me" async="true" data-domain="maslawfirmqatar-en"></script>
-                    </div>
-                @endif
-                @if (app()->isLocale('ar'))
-                    <div>
-                        <script src="https://embed.ycb.me" async="true" data-domain="maslawfirmqatar-ar"></script>
-                    </div>
-                @endif
-                @if (app()->isLocale('fr'))
-                    <div>
-                        <script src="https://embed.ycb.me" async="true" data-domain="maslawfirmqatar-fr"></script>
-                    </div>
-                @endif
-            </div>
-            {{-- <script src="https://embed.ycb.me" async="true" data-domain="maslawfirmqatar" data-content="schedule|all"
-                data-intent="itt_37bd8bbf-8c78-405c-9e85-b5af51437x12" data-flow="book|cancel|reschedule" data-copyparameters>
-            </script> --}}
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            hiddenDays: [5, 6],
+            dateClick: function(info) {
+                $('#modal').modal('show'); // Show the modal
+                $('#clicked-date').text('Clicked on: ' + info.dateStr); // Display the clicked date
+            }
+        });
+        calendar.render();
+    });
+
+</script>
+<style>
+    .fc-toolbar-title{
+        color: brown;
+        font-family: "Poppins", sans-serif !important;
+    }
+    .fc-daygrid-day-number{
+        font-weight: 900;
+        font-size: 1.3rem
+    }
+    .fc-daygrid-day-frame:hover{
+        background: #66666631;
+        transition-duration: 500ms;
+    }
+</style>
+<section class="px-xxl-5 py-5">
+    <div class="container-fluid px-xxl-5 px-lg-5">
+        <h1 class="display-3 text-dark text-center">{!! trans('contactus.mainHead') !!}</h1>
+        <h3 class="h4 text-center">{!! trans('contactus.subHead') !!}</h3>
+        <div class="mt-md-0 p-lg-5 z-50 mt-3">
+            <div id='calendar'></div>
         </div>
-    </section>
-@endsection
-@section('footer_scripts')
-    {{-- <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var timezoneLabels = document.getElementsByClassName('XIfp1dhaTtPa5UlikIR_');
-            if (timezoneLabels.length > 0) {
-                for (var i = 0; i < timezoneLabels.length; i++) {
-                    timezoneLabels[i].style.visibility = 'hidden';
-                }
-            }
+    </div>
+</section>
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel">Date Clicked</h5>
+                <button type="button" class="close btn btn-secondary" id="close-button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p id="clicked-date"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="close btn btn-secondary" id="close-button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        $('.close').click(function() {
+            $('#modal').modal('hide');
+            console.log('clicked');
         });
-
-        document.addEventListener("DOMContentLoaded", function() {
-            var timezoneLabels = document.getElementsByClassName('CRWV09Vs9BY6UR2JltQc');
-            if (timezoneLabels.length > 0) {
-                for (var i = 0; i < timezoneLabels.length; i++) {
-                    timezoneLabels[i].style.setProperty('visibility', 'hidden', 'important');
-                }
-            }
-        });
-    </script> --}}
-
+    });
+</script>
 @endsection
