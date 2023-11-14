@@ -49,14 +49,16 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="modalLabel">Date Clicked</h5>
                 <button type="button" class="close btn btn-secondary" id="close-button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span style="font-size: 20px;" aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <p id="clicked-date"></p>
+                <hr />
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" style="gap: 10px">
                 <button type="button" class="close btn btn-secondary" id="close-button">Close</button>
+                <button type="button" class="close btn btn-primary" id="close-button">Submit</button>
             </div>
         </div>
     </div>
@@ -66,6 +68,27 @@
         $('.close').click(function() {
             $('#modal').modal('hide');
             console.log('clicked');
+        });
+
+        $('#submit-button').click(function() {
+        // Get the clicked date
+            var clickedDate = $('#clicked-date').text().replace('Clicked on: ', '').trim();
+
+            // Make an AJAX request to store the event
+            $.ajax({
+                type: 'POST',
+                url: '{{ route("store-event") }}',
+                data: {
+                    date: clickedDate,
+                    // Add more data fields as needed
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
         });
     });
 </script>

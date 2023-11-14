@@ -47,6 +47,7 @@ Route::view('/about-us', 'aboutus');
 Route::view('/careers', 'careers');
 Route::get('/careers', [VacancyController::class, 'show'])->name('admin.vacancies.show');
 Route::view('/contact-us', 'schedule-consultation');
+Route::view('/add-off-date', 'offDate');
 
 Route::view('/our-team', 'our-team');
 Route::view('/our-team/ms-mashael-mohammad-alsulaiti', 'our-team-members.ms-mashael-mohammad-alsulaiti');
