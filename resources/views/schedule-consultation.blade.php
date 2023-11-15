@@ -115,7 +115,7 @@
             </div>
             <div class="modal-footer" style="gap: 10px">
                 <button type="button" class="close btn btn-secondary" id="close-button">Close</button>
-                <button type="button" class="close btn btn-primary" id="close-button">Submit</button>
+                <button type="button" class="close btn btn-primary" id="submit-button">Submit</button>
             </div>
         </div>
     </div>
@@ -139,11 +139,13 @@
         $('#submit-button').click(function() {
             var clickedDate = $('#clicked-date').text().replace('Clicked on: ', '').trim();
             var clickedTime = $('#clicked-time').text().replace('Clicked on: ', '').trim();
+            var datas = [clickedDate, clickedTime];
+            console.log(datas);
             $.ajax({
                 type: 'POST',
                 url: '{{ route("booking") }}',
                 data: {
-                    date: clickedDate,
+                    date: datas,
                 },
                 success: function(response) {
                     console.log(response);
