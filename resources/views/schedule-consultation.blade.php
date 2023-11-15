@@ -33,6 +33,32 @@
         background: #66666631;
         transition-duration: 500ms;
     }
+    .times {
+        /* display: flex; */
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .row {
+        margin: 5px; /* Adjust margin for spacing between rows */
+    }
+
+    button {
+        padding: 10px;
+        background-color: #5e1818; /* Button background color */
+        color: #fff; /* Button text color */
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #b92929; /* Change color on hover */
+    }
+    button:focus{
+        background-color: #b92929;
+    }
 </style>
 <section class="px-xxl-5 py-5">
     <div class="container-fluid px-xxl-5 px-lg-5">
@@ -54,7 +80,37 @@
             </div>
             <div class="modal-body">
                 <p id="clicked-date"></p>
+
                 <hr />
+                <div class="times">
+                    <div class="row">
+                        <button>8:00 AM</button>
+                    </div>
+                    <div class="row">
+                        <button>9:00 AM</button>
+                    </div>
+                    <div class="row">
+                        <button>10:00 AM</button>
+                    </div>
+                    <div class="row">
+                        <button>11:00 PM</button>
+                    </div>
+                    <div class="row">
+                        <button>12:00 PM</button>
+                    </div>
+                    <div class="row">
+                        <button>1:00 PM</button>
+                    </div>
+                    <div class="row">
+                        <button>2:00 PM</button>
+                    </div>
+                    <div class="row">
+                        <button>3:00 PM</button>
+                    </div>
+                    <div class="row">
+                        <button>4:00 PM</button>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer" style="gap: 10px">
                 <button type="button" class="close btn btn-secondary" id="close-button">Close</button>
@@ -63,6 +119,9 @@
         </div>
     </div>
 </div>
+<script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
+
 <script>
     $(document).ready(function() {
         $('.close').click(function() {
@@ -70,17 +129,18 @@
             console.log('clicked');
         });
 
-        $('#submit-button').click(function() {
-        // Get the clicked date
-            var clickedDate = $('#clicked-date').text().replace('Clicked on: ', '').trim();
+        $('.row button').click(function() {
+            var buttonText = $(this).text();
+            console.log('Clicked:', buttonText);
+        });
 
-            // Make an AJAX request to store the event
+        $('#submit-button').click(function() {
+            var clickedDate = $('#clicked-date').text().replace('Clicked on: ', '').trim();
             $.ajax({
                 type: 'POST',
-                url: '{{ route("store-event") }}',
+                url: '{{ route("booking") }}',
                 data: {
                     date: clickedDate,
-                    // Add more data fields as needed
                 },
                 success: function(response) {
                     console.log(response);

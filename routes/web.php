@@ -17,6 +17,7 @@ use App\Http\Controllers\InsightsController;
 use App\Http\Controllers\VacancyController;
 use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\LangController;
+use App\Http\Controllers\BookingController;
 
 
 /*
@@ -67,7 +68,9 @@ Route::view('/our-team/mr-emil-sebastian', 'our-team-members.mr-emil-sebastian')
 Route::view('/practice-areas', 'practice-areas');
 Route::get('/news-and-articles', [InsightsController::class, 'latestNews'])->name('news-and-articles.latestNews');
 Route::get('/events', [InsightsController::class, 'latestEvent'])->name('events.latestEvent');
+// Route::get('/articles', [PublicArticleController::class, 'index'])->name('articles.index');
 Route::get('/articles', [PublicArticleController::class, 'index'])->name('articles.index');
+Route::get('/booking', [BookingController::class, 'index'])->name('booking');
 Route::get('/articles/{slug}', [\App\Http\Controllers\PublicArticleController::class, 'show'])->name('articles.show');
 Route::get('/publications', [PublicPublicationController::class, 'index'])->name('publications.index');
 Route::get('/publications/{slug}', [\App\Http\Controllers\PublicPublicationController::class, 'show'])->name('publications.show');
