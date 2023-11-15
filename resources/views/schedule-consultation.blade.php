@@ -80,6 +80,7 @@
             </div>
             <div class="modal-body">
                 <p id="clicked-date"></p>
+                <p id="clicked-time"></p>
 
                 <hr />
                 <div class="times">
@@ -131,11 +132,13 @@
 
         $('.row button').click(function() {
             var buttonText = $(this).text();
+            $('#clicked-time').text('Clicked on: '+ buttonText);
             console.log('Clicked:', buttonText);
         });
 
         $('#submit-button').click(function() {
             var clickedDate = $('#clicked-date').text().replace('Clicked on: ', '').trim();
+            var clickedTime = $('#clicked-time').text().replace('Clicked on: ', '').trim();
             $.ajax({
                 type: 'POST',
                 url: '{{ route("booking") }}',
