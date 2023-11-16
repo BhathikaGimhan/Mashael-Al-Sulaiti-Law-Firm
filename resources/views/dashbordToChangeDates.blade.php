@@ -11,7 +11,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Navbar</a>
+        <a class="navbar-brand" href="#">Dashborad</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -19,24 +19,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Link</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Dropdown
-              </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="#">Action</a>
-                <a class="dropdown-item" href="#">Another action</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Something else here</a>
-              </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link disabled" href="#">Disabled</a>
+              <a class="nav-link" href="{{ url("/") }}">Home <span class="sr-only">(current)</span></a>
             </li>
           </ul>
         </div>
@@ -63,71 +46,55 @@
     </div>
       <div style="margin-top: 20px" class="container">
         <div class="row">
-            <table class="table table-hover table-inverse table-responsive">
-                <thead class="thead-inverse">
-                    <tr>
-                        <th>ID</th>
-                        <th>Date</th>
-                        <th>Time</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>Phone</th>
-                    </tr>
-                </thead>
-                <tbody id="bookingTableBody">
-                    <!-- Table rows will be dynamically added here -->
-                </tbody>
-            </table>
+            <h1>Holidays</h1> <br>
+    <ul id="holiday-list"></ul>
         </div>
 
     </div>
     <script>
         $(document).ready(function () {
-            // Fetch booking data using AJAX
-            $('#submit').click(function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: '{{ route("submit.holiday") }}',
-                    type: 'POST',
-                    data: $('#holidayForm').serialize(),
-                    success: function (response) {
-                        alert(response.message);
-                        // Optionally, you can reset the form after a successful submission
-                        // $('#holidayForm')[0].reset();
-                    },
-                    error: function (error) {
-                        console.log(error.responseJSON);
-                        alert('Error: Please check the form data.');
-                    }
-                });
+    fetchHolidays();
 
-            });
-            $.ajax({
-                type: 'GET',
-                url: '/get-booking-data',
-                dataType: 'json',
-                success: function (response) {
-                    // Iterate over the bookings and append rows to the table
-                    $.each(response.bookings, function (index, booking) {
-                        $('#bookingTableBody').append(`
-                            <tr>
-                                <td>${booking.id}</td>
-                                <td>${booking.booking_date}</td>
-                                <td>${booking.booking_time}</td>
-                                <td>${booking.first_name}</td>
-                                <td>${booking.last_name}</td>
-                                <td>${booking.email}</td>
-                                <td>${booking.phone}</td>
-                            </tr>
-                        `);
-                    });
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText); // Log any errors to the console
-                }
-            });
+    function fetchHolidays() {
+        $.ajax({
+            url: '/holidays',
+            type: 'GET',
+            success: function (data) {
+                // Clear the existing holiday list before appending new holidays
+                $('#holiday-list').empty();
+
+                // Iterate through holidays and append to the list
+                $.each(data.holidays, function (index, holiday) {
+                    $('#holiday-list').append('<li>' + holiday.date + ': ' + holiday.description + '</li>');
+                });
+            },
+            error: function (error) {
+                console.log(error);
+            }
         });
+    }
+
+    // Fetch booking data using AJAX
+    $('#submit').click(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: '{{ route("submit.holiday") }}',
+            type: 'POST',
+            data: $('#holidayForm').serialize(),
+            success: function (response) {
+                alert(response.message);
+                fetchHolidays();
+                // Optionally, you can reset the form after a successful submission
+                // $('#holidayForm')[0].reset();
+            },
+            error: function (error) {
+                console.log(error.responseJSON);
+                alert('Error: Please check the form data.');
+            }
+        });
+    });
+});
+
     </script>
 
 <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js" crossorigin="anonymous"></script>

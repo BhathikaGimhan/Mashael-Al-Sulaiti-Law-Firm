@@ -25,4 +25,11 @@ class HolidayController extends Controller
         // Return a response (you can customize this based on your requirements)
         return response()->json(['message' => 'Holiday added successfully']);
     }
+
+    public function index()
+    {
+        $holidays = Holiday::all();
+
+        return response()->json(['holidays' => $holidays]);
+    }
 }

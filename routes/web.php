@@ -54,6 +54,7 @@ Route::view('/dashbordToChangeDates', 'dashbordToChangeDates');
 Route::get('/get-booking-data', [BookingController::class, 'getBookingData']);
 Route::post('/booking', [BookingController::class, 'index'])->name('booking');
 Route::post('/submit-holiday', [HolidayController::class, 'store'])->name('submit.holiday');
+Route::get('/holidays', [HolidayController::class, 'index']);
 
 
 Route::view('/our-team', 'our-team');
