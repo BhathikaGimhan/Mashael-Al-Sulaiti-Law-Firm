@@ -32,4 +32,11 @@ class HolidayController extends Controller
 
         return response()->json(['holidays' => $holidays]);
     }
+
+    public function checkHoliday($date)
+    {
+        $isHoliday = Holiday::where('date', $date)->exists();
+        $date = Holiday::where('date', $date)->get();
+        return response()->json(['isHoliday' => $isHoliday, 'date' => $date]);
+    }
 }

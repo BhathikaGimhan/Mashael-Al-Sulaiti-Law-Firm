@@ -14,14 +14,115 @@
             initialView: 'dayGridMonth',
             hiddenDays: [5, 6],
             dateClick: function(info) {
-                $('#modal').modal('show'); // Show the modal
-                $('#clicked-date').text('Clicked on: ' + info.dateStr); // Display the clicked date
-                $('#date').val(info.dateStr); //
+                $('#modal').modal('show');
+                $('#clicked-date').text('Clicked on: ' + info.dateStr);
+                $('#date').val(info.dateStr);
+                fetchHolidays();
             }
         });
         calendar.render();
     });
 
+    function fetchHolidays() {
+        var clickedDate = $('#date').val();
+        console.log(clickedDate);
+        $.ajax({
+            url: '/holidays/check/' + clickedDate,
+            type: 'GET',
+            success: function (data) {
+                console.log(data);
+                if(data.isHoliday == true){
+                    $('#full_modle').hide();
+                    $('#full-modle-show').show();
+                    $('#description').text(data.date[0].description);
+
+                }else{
+                    $('#full_modle').show();
+                    $('#full-modle-show').hide();
+
+                }
+
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
+
+    $(document).ready(function() {
+        $('.user-data').hide();
+        $('#change-time').hide();
+        $('#submit-button').hide();
+
+        $('.close').click(function() {
+            $('#modal').modal('hide');
+            console.log('clicked');
+        });
+
+        $('.row button').click(function() {
+            var buttonText = $(this).text();
+            $('#clicked-time').text('Clicked on: '+ buttonText);
+            $('#time').val(buttonText);
+            $('.times').hide();
+            $('.user-data').show();
+            $('#change-time').show();
+            $('#submit-button').show();
+        });
+
+        $('#change-time').click(function(){
+            $('.times').show();
+            $('.user-data').hide();
+            $('#change-time').hide();
+            $('#submit-button').hide();
+        });
+
+        $('#submit-button').click(function() {
+            var clickedDate = $('#date').val();
+            var clickedTime = $('#time').val();
+            var firstName = $('#first-name').val();
+            var lastName = $('#last-name').val();
+            var email = $('#email').val();
+            var phone = $('#phone').val();
+
+            var formData = {
+                date: clickedDate,
+                time: clickedTime,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phone: phone
+            };
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            console.log(formData);
+            $.ajax({
+                type: 'POST',
+                url: '{{ route("booking") }}',
+                data: formData,
+                dataType: 'json',
+                success: function(response) {
+                    $('#date, #time, #first-name, #last-name, #email, #phone').val("");
+                    // Handle success, e.g., show a success message
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseJSON);
+                    if (xhr.status === 422) {
+                        var errors = xhr.responseJSON.errors;
+                        $.each(errors, function(key, value) {
+                            alert(value[0]);
+                        });
+                    } else {
+                        alert('An error occurred while processing your request.');
+                    }
+                }
+            });
+        });
+    });
 </script>
 <style>
     .fc-toolbar-title{
@@ -87,58 +188,64 @@
                 <button id="change-time">Change time</button>
 
                 <hr />
-                <div class="times">
-                    <div class="row">
-                        <button>8:00 AM</button>
+                <div id="full_modle" class="full_modle">
+                    <div class="times">
+                        <div class="row">
+                            <button>8:00 AM</button>
+                        </div>
+                        <div class="row">
+                            <button>9:00 AM</button>
+                        </div>
+                        <div class="row">
+                            <button>10:00 AM</button>
+                        </div>
+                        <div class="row">
+                            <button>11:00 PM</button>
+                        </div>
+                        <div class="row">
+                            <button>12:00 PM</button>
+                        </div>
+                        <div class="row">
+                            <button>1:00 PM</button>
+                        </div>
+                        <div class="row">
+                            <button>2:00 PM</button>
+                        </div>
+                        <div class="row">
+                            <button>3:00 PM</button>
+                        </div>
+                        <div class="row">
+                            <button>4:00 PM</button>
+                        </div>
                     </div>
-                    <div class="row">
-                        <button>9:00 AM</button>
-                    </div>
-                    <div class="row">
-                        <button>10:00 AM</button>
-                    </div>
-                    <div class="row">
-                        <button>11:00 PM</button>
-                    </div>
-                    <div class="row">
-                        <button>12:00 PM</button>
-                    </div>
-                    <div class="row">
-                        <button>1:00 PM</button>
-                    </div>
-                    <div class="row">
-                        <button>2:00 PM</button>
-                    </div>
-                    <div class="row">
-                        <button>3:00 PM</button>
-                    </div>
-                    <div class="row">
-                        <button>4:00 PM</button>
+                    <div class="user-data">
+                        <form method="post">
+                            @csrf
+                            <input type="hidden" name="" id="date" class="form-control" placeholder="" >
+                            <input type="hidden" name="" id="time" class="form-control" placeholder="" >
+
+                            <div class="form-group">
+                            <label for="">First Name:</label>
+                            <input type="text" name="" id="first-name" class="form-control" placeholder="" >
+                            </div>
+                            <div class="form-group">
+                                <label for="">Last Name:</label>
+                                <input type="text" name="" id="last-name" class="form-control" placeholder="" >
+                            </div>
+                            <div class="form-group">
+                                <label for="">Email:</label>
+                                <input type="text" name="" id="email" class="form-control" placeholder="" >
+                            </div>
+                            <div class="form-group">
+                                <label for="">Phone:</label>
+                                <input type="text" name="" id="phone" class="form-control" placeholder="" >
+                            </div>
+                        </form>
                     </div>
                 </div>
-                <div class="user-data">
-                    <form method="post">
-                        @csrf
-                        <input type="hidden" name="" id="date" class="form-control" placeholder="" >
-                        <input type="hidden" name="" id="time" class="form-control" placeholder="" >
-
-                        <div class="form-group">
-                        <label for="">First Name:</label>
-                        <input type="text" name="" id="first-name" class="form-control" placeholder="" >
-                        </div>
-                        <div class="form-group">
-                            <label for="">Last Name:</label>
-                            <input type="text" name="" id="last-name" class="form-control" placeholder="" >
-                        </div>
-                        <div class="form-group">
-                            <label for="">Email:</label>
-                            <input type="text" name="" id="email" class="form-control" placeholder="" >
-                        </div>
-                        <div class="form-group">
-                            <label for="">Phone:</label>
-                            <input type="text" name="" id="phone" class="form-control" placeholder="" >
-                        </div>
-                    </form>
+                <div id="full-modle-show" class="full-modle-show">
+                    <p>Sorry, this date is not available for booking.</p>
+                    <p id="description"></p>
                 </div>
             </div>
             <div class="modal-footer" style="gap: 10px">
@@ -151,91 +258,5 @@
 <script src="https://kit.fontawesome.com/your-fontawesome-kit-id.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timepicker/0.5.2/js/bootstrap-timepicker.min.js"></script>
 
-<script>
-    $(document).ready(function() {
-        $('.user-data').hide();
-        $('#change-time').hide();
-        $('#submit-button').hide();
-        $('.close').click(function() {
-            $('#modal').modal('hide');
-            console.log('clicked');
-        });
 
-        $('.row button').click(function() {
-            var buttonText = $(this).text();
-            $('#clicked-time').text('Clicked on: '+ buttonText);
-            $('#time').val( buttonText);
-            $('.times').hide();
-            $('.user-data').show();
-            $('#change-time').show();
-            $('#submit-button').show();
-
-
-        });
-
-        $('#change-time').click(function(){
-            $('.times').show();
-            $('.user-data').hide();
-            $('#change-time').hide();
-            $('#submit-button').hide();
-
-
-        });
-
-        $('#submit-button').click(function() {
-            var clickedDate = $('#date').val();
-            var clickedTime = $('#time').val();
-            var firstName = $('#first-name').val(); // <-- This line might be causing the error
-            var lastName = $('#last-name').val();
-            var email = $('#email').val();
-            var phone = $('#phone').val();
-
-            var formData = {
-                date: clickedDate,
-                time: clickedTime,
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                phone: phone
-            };
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            console.log(formData);
-            $.ajax({
-                type: 'POST',
-                url: '{{ route("booking") }}',
-                data: formData, // Fix the variable name here
-                dataType: 'json',
-                success: function(response) {
-                    var clickedDate = $('#date').val("");
-                    var clickedTime = $('#time').val("");
-                    var firstName = $('#first-name').val(""); // <-- This line might be causing the error
-                    var lastName = $('#last-name').val("");
-                    var email = $('#email').val("");
-                    var phone = $('#phone').val("");
-                    // Handle success, e.g., show a success message
-                },
-                error: function(xhr, status, error) {
-                    console.log(xhr.responseJSON); // Check the validation errors in the console
-                    // Handle errors, e.g., display error messages to the user
-                    if (xhr.status === 422) {
-                        // Handle validation errors, for example:
-                        var errors = xhr.responseJSON.errors;
-                        $.each(errors, function(key, value) {
-                            alert(value[0]); // Display the first error for each field
-                        });
-                    } else {
-                        // Handle other errors
-                        alert('An error occurred while processing your request.');
-                    }
-                }
-            });
-        });
-    });
-</script>
 @endsection
