@@ -70,7 +70,7 @@ Route::get('/news-and-articles', [InsightsController::class, 'latestNews'])->nam
 Route::get('/events', [InsightsController::class, 'latestEvent'])->name('events.latestEvent');
 // Route::get('/articles', [PublicArticleController::class, 'index'])->name('articles.index');
 Route::get('/articles', [PublicArticleController::class, 'index'])->name('articles.index');
-Route::get('/booking', [BookingController::class, 'index'])->name('booking');
+Route::post('/booking', [BookingController::class, 'index'])->name('booking');
 Route::get('/articles/{slug}', [\App\Http\Controllers\PublicArticleController::class, 'show'])->name('articles.show');
 Route::get('/publications', [PublicPublicationController::class, 'index'])->name('publications.index');
 Route::get('/publications/{slug}', [\App\Http\Controllers\PublicPublicationController::class, 'show'])->name('publications.show');

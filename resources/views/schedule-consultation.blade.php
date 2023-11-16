@@ -2,6 +2,8 @@
 
 @section('title', 'Mashael Alsulaiti Law Firm | Schedule Consultation')
 @section('content')
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js'></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
@@ -14,6 +16,7 @@
             dateClick: function(info) {
                 $('#modal').modal('show'); // Show the modal
                 $('#clicked-date').text('Clicked on: ' + info.dateStr); // Display the clicked date
+                $('#date').val(info.dateStr); //
             }
         });
         calendar.render();
@@ -81,6 +84,7 @@
             <div class="modal-body">
                 <p id="clicked-date"></p>
                 <p id="clicked-time"></p>
+                <button id="change-time">Change time</button>
 
                 <hr />
                 <div class="times">
@@ -112,6 +116,30 @@
                         <button>4:00 PM</button>
                     </div>
                 </div>
+                <div class="user-data">
+                    <form method="post">
+                        @csrf
+                        <input type="hidden" name="" id="date" class="form-control" placeholder="" >
+                        <input type="hidden" name="" id="time" class="form-control" placeholder="" >
+
+                        <div class="form-group">
+                        <label for="">First Name:</label>
+                        <input type="text" name="" id="first-name" class="form-control" placeholder="" >
+                        </div>
+                        <div class="form-group">
+                            <label for="">Last Name:</label>
+                            <input type="text" name="" id="last-name" class="form-control" placeholder="" >
+                        </div>
+                        <div class="form-group">
+                            <label for="">Email:</label>
+                            <input type="text" name="" id="email" class="form-control" placeholder="" >
+                        </div>
+                        <div class="form-group">
+                            <label for="">Phone:</label>
+                            <input type="text" name="" id="phone" class="form-control" placeholder="" >
+                        </div>
+                    </form>
+                </div>
             </div>
             <div class="modal-footer" style="gap: 10px">
                 <button type="button" class="close btn btn-secondary" id="close-button">Close</button>
@@ -125,6 +153,9 @@
 
 <script>
     $(document).ready(function() {
+        $('.user-data').hide();
+        $('#change-time').hide();
+        $('#submit-button').hide();
         $('.close').click(function() {
             $('#modal').modal('hide');
             console.log('clicked');
@@ -133,25 +164,75 @@
         $('.row button').click(function() {
             var buttonText = $(this).text();
             $('#clicked-time').text('Clicked on: '+ buttonText);
-            console.log('Clicked:', buttonText);
+            $('#time').val( buttonText);
+            $('.times').hide();
+            $('.user-data').show();
+            $('#change-time').show();
+            $('#submit-button').show();
+
+
+        });
+
+        $('#change-time').click(function(){
+            $('.times').show();
+            $('.user-data').hide();
+            $('#change-time').hide();
+            $('#submit-button').hide();
+
+
         });
 
         $('#submit-button').click(function() {
-            var clickedDate = $('#clicked-date').text().replace('Clicked on: ', '').trim();
-            var clickedTime = $('#clicked-time').text().replace('Clicked on: ', '').trim();
-            var datas = [clickedDate, clickedTime];
-            console.log(datas);
+            var clickedDate = $('#date').val();
+            var clickedTime = $('#time').val();
+            var firstName = $('#first-name').val(); // <-- This line might be causing the error
+            var lastName = $('#last-name').val();
+            var email = $('#email').val();
+            var phone = $('#phone').val();
+
+            var formData = {
+                date: clickedDate,
+                time: clickedTime,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phone: phone
+            };
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            console.log(formData);
             $.ajax({
                 type: 'POST',
                 url: '{{ route("booking") }}',
-                data: {
-                    date: datas,
-                },
+                data: formData, // Fix the variable name here
+                dataType: 'json',
                 success: function(response) {
-                    console.log(response);
+                    var clickedDate = $('#date').val("");
+                    var clickedTime = $('#time').val("");
+                    var firstName = $('#first-name').val(""); // <-- This line might be causing the error
+                    var lastName = $('#last-name').val("");
+                    var email = $('#email').val("");
+                    var phone = $('#phone').val("");
+                    // Handle success, e.g., show a success message
                 },
-                error: function(error) {
-                    console.log(error);
+                error: function(xhr, status, error) {
+                    console.log(xhr.responseJSON); // Check the validation errors in the console
+                    // Handle errors, e.g., display error messages to the user
+                    if (xhr.status === 422) {
+                        // Handle validation errors, for example:
+                        var errors = xhr.responseJSON.errors;
+                        $.each(errors, function(key, value) {
+                            alert(value[0]); // Display the first error for each field
+                        });
+                    } else {
+                        // Handle other errors
+                        alert('An error occurred while processing your request.');
+                    }
                 }
             });
         });
