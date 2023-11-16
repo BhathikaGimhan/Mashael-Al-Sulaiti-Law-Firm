@@ -9,6 +9,17 @@ use Illuminate\Support\Facades\Validator;
 
 class BookingController extends Controller
 {
+
+    // BookingController.php
+
+    public function getBookingData()
+    {
+        $bookings = booking::all(); // Fetch all booking data from the database
+
+        return response()->json(['bookings' => $bookings]);
+    }
+
+
     public function index(Request $request)
     {
         // Validate the form data

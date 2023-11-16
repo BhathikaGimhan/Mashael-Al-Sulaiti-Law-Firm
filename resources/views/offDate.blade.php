@@ -226,7 +226,7 @@
             // Validate the credentials (You should replace this with your actual validation logic)
             if (email === "example@email.com" && password === "password123") {
               // Redirect to the dashboard (You should replace this URL with your actual dashboard URL)
-              window.location.href = "/";
+              window.location.href = "/dashbordToChangeDates";
             } else {
               // Display an error message or handle invalid credentials
               alert("Invalid credentials. Please try again.");

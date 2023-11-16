@@ -49,6 +49,10 @@ Route::view('/careers', 'careers');
 Route::get('/careers', [VacancyController::class, 'show'])->name('admin.vacancies.show');
 Route::view('/contact-us', 'schedule-consultation');
 Route::view('/add-off-date', 'offDate');
+Route::view('/dashbordToChangeDates', 'dashbordToChangeDates');
+Route::get('/get-booking-data', [BookingController::class, 'getBookingData']);
+Route::post('/booking', [BookingController::class, 'index'])->name('booking');
+
 
 Route::view('/our-team', 'our-team');
 Route::view('/our-team/ms-mashael-mohammad-alsulaiti', 'our-team-members.ms-mashael-mohammad-alsulaiti');
@@ -70,7 +74,6 @@ Route::get('/news-and-articles', [InsightsController::class, 'latestNews'])->nam
 Route::get('/events', [InsightsController::class, 'latestEvent'])->name('events.latestEvent');
 // Route::get('/articles', [PublicArticleController::class, 'index'])->name('articles.index');
 Route::get('/articles', [PublicArticleController::class, 'index'])->name('articles.index');
-Route::post('/booking', [BookingController::class, 'index'])->name('booking');
 Route::get('/articles/{slug}', [\App\Http\Controllers\PublicArticleController::class, 'show'])->name('articles.show');
 Route::get('/publications', [PublicPublicationController::class, 'index'])->name('publications.index');
 Route::get('/publications/{slug}', [\App\Http\Controllers\PublicPublicationController::class, 'show'])->name('publications.show');
