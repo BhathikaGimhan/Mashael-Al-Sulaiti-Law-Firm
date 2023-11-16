@@ -18,6 +18,7 @@ use App\Http\Controllers\VacancyController;
 use App\Http\Controllers\SubscriberController;
 use App\Http\Controllers\LangController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\HolidayController;
 
 
 /*
@@ -52,6 +53,7 @@ Route::view('/add-off-date', 'offDate');
 Route::view('/dashbordToChangeDates', 'dashbordToChangeDates');
 Route::get('/get-booking-data', [BookingController::class, 'getBookingData']);
 Route::post('/booking', [BookingController::class, 'index'])->name('booking');
+Route::post('/submit-holiday', [HolidayController::class, 'store'])->name('submit.holiday');
 
 
 Route::view('/our-team', 'our-team');
