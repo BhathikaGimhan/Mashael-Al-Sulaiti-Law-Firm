@@ -14,14 +14,30 @@
             initialView: 'dayGridMonth',
             hiddenDays: [5, 6],
             dateClick: function(info) {
-                $('#modal').modal('show');
-                $('#clicked-date').text('Clicked on: ' + info.dateStr);
-                $('#date').val(info.dateStr);
-                fetchHolidays();
+                if (isDateAllowed(info.date)) {
+                    $('#modal').modal('show');
+                    $('#clicked-date').text('Clicked on: ' + info.dateStr);
+                    $('#date').val(info.dateStr);
+                    fetchHolidays();
+                } else {
+                    // Display a message or take appropriate action for disallowed dates
+                    alert('Booking is not allowed for this date.');
+                }
             }
         });
         calendar.render();
     });
+
+    function isDateAllowed(selectedDate) {
+    // Implement your logic here to check if the selected date is allowed for booking
+    // For example, you can compare the selected date with the current date and allow bookings for a specific range
+
+    // Example: Allow bookings for dates starting from tomorrow
+    var currentDate = new Date();
+    currentDate.setDate(currentDate.getDate() - 1);
+
+    return selectedDate >= currentDate;
+}
 
     function fetchHolidays() {
         var clickedDate = $('#date').val();

@@ -65,7 +65,14 @@ class BookingController extends Controller
             'last_name' => $booking->last_name,
             'phone' => $booking->phone,
         ];
-
+        $adminEmailData = [
+            'booking_date' => $booking->booking_date,
+            'booking_time' => $booking->booking_time,
+            'first_name' => $booking->first_name,
+            'last_name' => $booking->last_name,
+            'phone' => $booking->phone,
+        ];
+        Mail::to('e2145199@bit.uom.lk')->send(new \App\Mail\BookingConfirmationAdminMail($adminEmailData));
         // Assuming you have created a Mailable class named BookingConfirmationMail
         Mail::to($booking->email)->send(new \App\Mail\BookingConfirmationMail($emailData));
 

@@ -11,6 +11,7 @@
         <li>Date: {{ $emailData['booking_date'] }}</li>
         <li>Time: {{ $emailData['booking_time'] }}</li>
         <li>Name: {{ $emailData['first_name'] }} {{ $emailData['last_name'] }}</li>
+        <li>Name: {{ $emailData['phone'] }}</li>
     </ul>
 </body>
 </html>
