@@ -62,6 +62,7 @@
             success: function (data) {
                 // Clear the existing holiday list before appending new holidays
                 $('#holiday-list').empty();
+                console.log(data)
 
                 // Iterate through holidays and append to the list
                 $.each(data.holidays, function (index, holiday) {

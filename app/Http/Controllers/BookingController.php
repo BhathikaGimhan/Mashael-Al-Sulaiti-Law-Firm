@@ -63,6 +63,7 @@ class BookingController extends Controller
             'booking_time' => $booking->booking_time,
             'first_name' => $booking->first_name,
             'last_name' => $booking->last_name,
+            'phone' => $booking->phone,
         ];
 
         // Assuming you have created a Mailable class named BookingConfirmationMail

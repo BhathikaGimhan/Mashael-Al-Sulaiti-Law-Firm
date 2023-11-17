@@ -36,8 +36,7 @@ class BookingConfirmationMail extends Mailable
     /**
      * Get the message content definition.
      */
-    public function build()
-    {
+    public function build() {
         return $this->view('emails.booking_confirmation_email')
                     ->subject('Booking Confirmation Mail')
                     ->with([
