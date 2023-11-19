@@ -224,7 +224,7 @@
             var password = $("#password").val();
 
             // Validate the credentials (You should replace this with your actual validation logic)
-            if (email === "example@email.com" && password === "password123") {
+            if (email === "consultations@mas.com.qa" && password === "password123") {
               // Redirect to the dashboard (You should replace this URL with your actual dashboard URL)
               window.location.href = "/dashbordToChangeDates";
             } else {
